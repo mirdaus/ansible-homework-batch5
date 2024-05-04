@@ -1,0 +1,39 @@
+- hosts: 138.197.38.75
+  tasks:
+  - name: apt the latest version of Apache
+    apt:
+      name:
+        - apache2
+        - git
+        - tree
+      state: latest
+
+  - name: Start service apache2, if not started
+    service:
+      name: apache2
+      state: started
+      enabled: yes
+
+  
+  - name: Create groups
+    group:
+      name: "{{ item }}"
+    loop: 
+      - 'devops'
+      - 'kaizen'
+      - 'qa'
+
+  - name: Add the user 'Elena' with a bash shell, appending the group 'kaizen' and 'qa' to the user's groups
+    user:
+      name: Elena
+      shell: /bin/bash
+      groups: kaizen,qa
+      append: yes  
+
+  - name: Add the user 'tester'  to a primary group of 'qa'
+    user:
+      name: tester
+      comment: 
+      group: qa     
+
+
